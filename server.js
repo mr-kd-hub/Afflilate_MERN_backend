@@ -16,4 +16,5 @@ mongoose.connect("mongodb://127.0.0.1:27017/affilate",{useNewUrlParser:true,useU
 })
 
 app.use("/api", roteUrl); 
+
 app.listen(9000,()=>{console.log("servere is up and running")})
