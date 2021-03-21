@@ -1,0 +1,27 @@
+POST http://localhost:9000/api/signup
+Content-Type: application/json
+
+{
+    "fullname" : "dhruv",
+    "email" : "admin@gmail.com",
+    "password" : "1234"
+}
+###
+
+POST http://localhost:9000/api/login
+Content-Type: application/json
+
+{
+    "email" : "admin@gmail.com",
+    "password" : "1234"
+}
+###
+
+POST http://localhost:9000/api/contact
+Content-Type: application/json
+
+{
+    "name":"dhruvv",
+    "email":"aadmin@gmail.com",
+    "message":"hello how are you"
+}
