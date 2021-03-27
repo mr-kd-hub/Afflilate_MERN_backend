@@ -67,11 +67,11 @@ router.post('/login', async (req, res) => {
     users
       .findOne({ email: email, password: password })
       .then((user) => {
-        if (user) {
-          
+        if (user) {          
           const token = tokenGenerator(user.id);
           res.send({ success: true, msg: 'Success login', token });
-        } else {        
+        } 
+        else {        
           res.send({ success: false, msg: 'Wrong data' });
         }
       })
