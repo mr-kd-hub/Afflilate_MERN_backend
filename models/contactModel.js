@@ -20,5 +20,5 @@ const contactSchema = new mongoose.Schema({
         default: Date.now
     }
 })
-//collection(users) creation
+//collection(contact) creation at db
 module.exports = mongoose.model("contact",contactSchema);

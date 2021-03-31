@@ -25,3 +25,34 @@ Content-Type: application/json
     "email":"aadmin@gmail.com",
     "message":"hello how are you"
 }
+
+###
+POST http://localhost:9000/api/addCategory
+Content-Type: application/json
+
+{
+    "title":"Women Wear",
+    "image":"https://rukminim1.flixcart.com/image/800/960/jvv9zm80/kids-ethnic-set/b/v/t/2-3-years-digibc001-digimart-original-imafggkydgvztb2k.jpeg?q=50",
+    "status":1,
+    "feature_to_home":1
+}
+
+###
+POST http://localhost:9000/api/addProduct
+Content-Type: application/json
+
+{
+    "flipkart_link":"https://www.flipkart.com/kuons-avenue-men-solid-straight-kurta/p/itmf7rp67wtthhzh?pid=KTAF7RG6SPRJRJUK&lid=LSTKTAF7RG6SPRJRJUKKJVTXK&marketplace=FLIPKART&q=indo+western+dress+party+wear+for+men&store=clo%2Fcfv%2Fcib%2Fjks&srno=s_1_1&otracker=AS_QueryStore_OrganicAutoSuggest_2_7_sc_na_ps&otracker1=AS_QueryStore_OrganicAutoSuggest_2_7_sc_na_ps&fm=SEARCH&iid=5e546f92-3888-40dd-a12a-f60ebbf604b0.KTAF7RG6SPRJRJUK.SEARCH&ppt=sp&ppn=sp&ssid=zmtntdn8ww0000001617180398412&qH=86bdd77770ed874e",
+    "status":1,
+    "category":"Mens Wear",
+    "feature_to_home":1
+}
+
+###
+GET  http://localhost:9000/api/showCategory
+Content-Type: application/json
+
+###
+GET http://localhost:9000/api/showProduct
+Content-Type: application/json
+

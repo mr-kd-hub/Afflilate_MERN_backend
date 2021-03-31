@@ -4,8 +4,7 @@ const validator = require('validator');
 const signupSchema = new mongoose.Schema({
     fullname : {
         type : String,
-        required : true,
-        
+        required : true,        
     },
     email : {
         type : String,
@@ -28,5 +27,5 @@ const signupSchema = new mongoose.Schema({
         default: Date.now
     }
 })
-//collection(users) creation
+//collection(users) creation at db
 module.exports = mongoose.model("users",signupSchema);
