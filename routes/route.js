@@ -6,6 +6,10 @@ const key = '$adfbaub$cadlvnkajdnv5515aeea';
 const hash = 'hvdvcvhvvgcvhgvs$';
 const { tokenGenerator } = require('../util/tokenGenerator');
 
+//webscarpping
+const request = require('request');
+const cheerio = require('cheerio');
+
 //models
 const users = require('../models/signupModel');
 const contact = require('../models/contactModel');
@@ -156,8 +160,22 @@ router.get('/showProduct',async(req,res) => {
       .then((user)=>{
        if(user)
        {
-          //const url = user[0].flipkart_link;
-          res.send({ success: true, msg: 'Success',user});
+          const url = user[0].flipkart_link;
+          const data = user;//product detail array
+          request(url,(err,ress,html) => {
+           
+                if(!err && ress.statusCode == 200)
+                {            
+                    console.log("request Successfull");                   
+                    const $ = cheerio.load(html);
+
+                   //console.log(data)
+                }
+                else{
+                    console.log("request failed : "+err)                   
+                }
+            });
+          res.send({ success: true, msg: 'Success'});
        }
         //res.send({ success: true, msg: 'Success',user});
       })
