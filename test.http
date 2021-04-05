@@ -31,10 +31,11 @@ POST http://localhost:9000/api/addCategory
 Content-Type: application/json
 
 {
-    "title":"Women Wear",
+    "title":"Mens Wear",
     "image":"https://rukminim1.flixcart.com/image/800/960/jvv9zm80/kids-ethnic-set/b/v/t/2-3-years-digibc001-digimart-original-imafggkydgvztb2k.jpeg?q=50",
     "status":1,
-    "feature_to_home":1
+    "feature_to_home":1,
+    "link":"https://www.amazon.in/b?_encoding=UTF8&tag=zoddok-21&linkCode=ur2&linkId=0bad38f96902e04fd811ae1a541a8d8a&camp=3638&creative=24630&node=1968024031"
 }
 
 ###
@@ -42,14 +43,19 @@ POST http://localhost:9000/api/addProduct
 Content-Type: application/json
 
 {
-    "flipkart_link":"https://www.flipkart.com/kuons-avenue-men-solid-straight-kurta/p/itmf7rp67wtthhzh?pid=KTAF7RG6SPRJRJUK&lid=LSTKTAF7RG6SPRJRJUKKJVTXK&marketplace=FLIPKART&q=indo+western+dress+party+wear+for+men&store=clo%2Fcfv%2Fcib%2Fjks&srno=s_1_1&otracker=AS_QueryStore_OrganicAutoSuggest_2_7_sc_na_ps&otracker1=AS_QueryStore_OrganicAutoSuggest_2_7_sc_na_ps&fm=SEARCH&iid=5e546f92-3888-40dd-a12a-f60ebbf604b0.KTAF7RG6SPRJRJUK.SEARCH&ppt=sp&ppn=sp&ssid=zmtntdn8ww0000001617180398412&qH=86bdd77770ed874e",
+    "flipkart_link":"//ws-in.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=IN&source=ss&ref=as_ss_li_til&ad_type=product_link&tracking_id=zoddok-21&marketplace=amazon&region=IN&placement=B08R1PRPXS&asins=B08R1PRPXS&linkId=0612b96e4e4e513a2735e6be527a4240&show_border=true&link_opens_in_new_window=true",
     "status":1,
-    "category":"Mens Wear",
-    "feature_to_home":1
+    "category":"Kids Wear",
+    "feature_to_home":1,
+    "name":"Shirt"
 }
 
 ###
 GET  http://localhost:9000/api/showCategory
+Content-Type: application/json
+
+###
+GET  http://localhost:9000/api/showAllCategory
 Content-Type: application/json
 
 ###

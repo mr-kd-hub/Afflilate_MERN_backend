@@ -5,17 +5,12 @@ const router = require("express").Router();
 const key = "$adfbaub$cadlvnkajdnv5515aeea";
 const hash = "hvdvcvhvvgcvhgvs$";
 const { tokenGenerator } = require("../util/tokenGenerator");
-const axios = require('axios');
-//webscarpping
-const request = require("request");
-const cheerio = require("cheerio");
 
 //models
 const users = require("../models/signupModel");
-const contact = require("../models/contactModel");
 const product = require("../models/productModel");
-const productTmpDataModel = require("../models/productTmpDataModel");
 const category = require("../models/categoryModel");
+const contactus = require("../models/contactModel");
 
 //admin , add product
 router.post("/addProduct", async (req, res) => {
@@ -24,7 +19,8 @@ router.post("/addProduct", async (req, res) => {
     const status = req.body.status;
     const category = req.body.category;
     const feature_to_home = req.body.feature_to_home;
-    if (!flipkart_link || !category || !status || !feature_to_home) {
+    const name = req.body.name;
+    if (!flipkart_link || !category || !status || !feature_to_home || !name) {
       return res.send({ success: false, msg: "Please Enter all fields.." });
     }
 
@@ -33,6 +29,7 @@ router.post("/addProduct", async (req, res) => {
       status: req.body.status,
       category: req.body.category,
       feature_to_home: req.body.feature_to_home,
+      name : req.body.name
     });
     //promise
     products
@@ -61,7 +58,8 @@ router.post("/addCategory", async (req, res) => {
     const image = req.body.image;
     const status = req.body.status;
     const feature_to_home = req.body.feature_to_home;
-    if (!title || !image || !status || !feature_to_home) {
+    const link = req.body.link;
+    if (!title || !image || !status || !feature_to_home || !link) {
       return res.send({ success: false, msg: "Please Enter all fields.." });
     }
     category
@@ -75,6 +73,7 @@ router.post("/addCategory", async (req, res) => {
           image: req.body.image,
           status: req.body.status,
           feature_to_home: req.body.feature_to_home,
+          link:req.body.link
         });
         //promise
         categories
@@ -153,98 +152,19 @@ router.post("/signup", async (req, res) => {
 });
 
 //to fetch products
-router.get("/showProduct", async (req, res) => {
+router.get("/showProduct", async (req, res) => { 
   try {
-   
- product.find({ status: 1, feature_to_home: 1 })
- .then((product)=>{
-    return res.send({
-        success: true,
-        msg: "fetch data success",
-        product
-      });
- })
- .catch((err)=>{
-     console.log(err)
- })
-   
-    // for (let i = 0; i < productData.length; i++) {
-    //   let currentData = {};
-      
-    //   axios.
-    //   get(productData[i].flipkart_link)
-    //   .then((res)=>{
-    //       console.log("resoindd "+i)
-    //       const $ = cheerio.load(res.data);
-    //       title = $(".B_NuCI").text().trim();
-    //       console.log("title"+title)
-    //       t.push(title)
-          
-
-    //   })
-    //   .catch((err)=>{
-    //     console.log("errr "+err)
-    //   })
-    //   request(productData[i].flipkart_link,async (err, ress, html) => {
-    //     let title;
-    //     let size = [];
-    //     let color = [];
-    //     let img;
-    //     let description;
-    //     let rating;
-    //     let price;
-
-    //     if (!err && ress.statusCode == 200) {
-    //       console.log("request Successfull");
-    //       const $ = cheerio.load(html);
-
-
-    //        title = $(".B_NuCI").text().trim();
-    //       $(" ul._1q8vHb > li._3V2wfe > a._31hAvz ").each((index, aa) => {
-    //          size = $(aa).text().trim();
-    //     //     console.log(size);
-    //       });
-
-    //       price = $("div._16Jk6d ").text().trim();
-         
-    //       $(" ul._1q8vHb > li._3V2wfe > a.kmlXmn > div._2C41yO > img._30PAEw").each((index, aa) => {
-    //         color = $(aa).attr("src");
-    //       });
-
-    //       ratting = $('div._3uSWvT').text()
-
-    //       let imgg = JSON.parse($("script#jsonLD").html());
-    //       let img = imgg[0]["image"];
-
-    //       review = $("span._2_R_DZ > span", html).html().split("<")[0];
-    //       description = $("div.X3BRps").text().trim();
-
-    //       currentData = {
-    //         title,
-    //         size,
-    //         color,
-    //         description,
-    //         rating,
-    //         price
-    //       };
-    //       console.log("\n\n\nCurrentData",currentData)
-          
-    // const removeData = await productTmpDataModel.deleteMany({});
-    //       const productTmpData = await productTmpDataModel.create(currentData);
-    //       tmpdata.push(currentData)
-    //     } else {
-    //       console.log("request failed : " + err);
-    //     }
-    //   });
-    // }
-
-    // const resp = await productTmpDataModel.find({})
-    // console.log("resp",resp)
-    // res.send(resp)
-    // setTimeout(() => {   
-    //     return res.send(tmpdata)
-    // }, 3000);
-
+      product.find({ status: 1, feature_to_home: 1 }).sort({_id:-1})
+      .then((product)=>{
+            if (product) {
+                res.send({ success: true, msg: "Success", product });
+            } else {
+                res.send({ success: false, msg: "No Category To Display" });
+            }
+      })
+      .catch((err)=>{
+        console.log("error in fetch product api backend : \n"+err)
+      })
   } catch (err) {
     res.send({ success: false, msg: "error in showCategory API : " + err });
   }
@@ -254,7 +174,7 @@ router.get("/showProduct", async (req, res) => {
 router.get("/showCategory", async (req, res) => {
   try {
     category
-      .find({ status: 1, feature_to_home: 1 })
+      .find({ status: 1, feature_to_home: 1 }).sort({_id:-1})
       .then((user) => {
         if (user) {
           res.send({ success: true, msg: "Success", user });
@@ -269,6 +189,27 @@ router.get("/showCategory", async (req, res) => {
     res.send({ success: false, msg: "error in showCategory API : " + err });
   }
 });
+
+//show allcategories
+router.get("/showAllCategory", async (req, res) => {
+    try {
+      category
+        .find({ status: 1 }).sort({_id:-1})
+        .then((user) => {
+          if (user) {
+            res.send({ success: true, msg: "Success", user });
+          } else {
+            res.send({ success: false, msg: "No Category To Display" });
+          }
+        })
+        .catch((err) => {
+          res.send({ success: false, msg: "error in Category Display : " + err });
+        });
+    } catch (err) {
+      res.send({ success: false, msg: "error in showCategory API : " + err });
+    }
+  });
+  
 
 //login API
 router.post("/login", async (req, res) => {
@@ -306,30 +247,31 @@ router.post("/login", async (req, res) => {
 
 //contactusAPI
 router.post("/contact", (req, res) => {
-  try {
-    const name = req.body.name;
-    const email = req.body.email;
-    const message = req.body.message;
+    try {
+        const name = req.body.name;
+        const email = req.body.email;
+        const message = req.body.message;
 
-    if (!name || !email || !message) {
-      return res.json({ success: false, msg: "Please Enter all fields" });
+        if (!name || !email || !message) {
+            return res.send({ success: false, msg: "Please Enter all fields" });
+        }
+        const customer = new contactus({
+        name: req.body.name,
+        email: req.body.email,
+        message: req.body.message,
+        });
+        customer
+        .save()
+        .then(() => {
+            return res.send({ success: true, msg: "Thank you For Contacting Us.."});
+        })
+        .catch((err) => {
+            return res.send({ success: false, msg: "Not Contacted : " + err });
+        });
+    } 
+    catch (err) {
+        res.send({ success: false, msg: "error in contact API" });
     }
-    const customer = new contact({
-      name: req.body.name,
-      email: req.body.email,
-      message: req.body.message,
-    });
-    customer
-      .save()
-      .then((user) => {
-        return res.json({ success: true, msg: "Successfully Contacted", user });
-      })
-      .catch((err) => {
-        return res.json({ success: false, msg: "not Contacted : " + err });
-      });
-  } catch (err) {
-    res.json({ success: false, msg: "error in contact API" });
-  }
 });
 
 module.exports = router;
