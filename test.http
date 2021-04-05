@@ -62,3 +62,6 @@ Content-Type: application/json
 GET http://localhost:9000/api/showProduct
 Content-Type: application/json
 
+###
+GET http://localhost:9000/api/showAllProduct
+Content-Type: application/json

@@ -170,6 +170,25 @@ router.get("/showProduct", async (req, res) => {
   }
 });
 
+//to fetch AllProducts
+router.get("/showAllProduct", async (req, res) => { 
+    try {
+        product.find({ status: 1 }).sort({_id:-1})
+        .then((product)=>{
+              if (product) {
+                  res.send({ success: true, msg: "Success", product });
+              } else {
+                  res.send({ success: false, msg: "No Category To Display" });
+              }
+        })
+        .catch((err)=>{
+          console.log("error in fetch product api backend : \n"+err)
+        })
+    } catch (err) {
+      res.send({ success: false, msg: "error in showCategory API : " + err });
+    }
+  });
+
 //show categoey
 router.get("/showCategory", async (req, res) => {
   try {
