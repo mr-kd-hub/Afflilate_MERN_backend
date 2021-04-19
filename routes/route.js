@@ -231,26 +231,48 @@ router.get("/showAllCategory", async (req, res) => {
   
 
 //login API
-router.post("/login", async (req, res) => {
+router.post("/login",  (req, res) => {
   try {
     const email = req.body.email;
     const password = key + req.body.password + hash;
     if (!email || !password) {
       return res.send({ success: false, msg: "Please Enter all fields" });
     }
+    //admin
+    if(req.body.is_staff)
+    {
+        users.findOne({ email: email, password: password,is_staff:1 })
+        .then((user) => {
+          if(user)
+          {
+            const token = tokenGenerator(user.id);
+            const flag=1;
+            res.send({ success: true, msg: "Success login admin", token,flag });
+            
+          }
+          else {
+            res.send({ success: false, msg: "Wrong data" });
+          }
+        })
+        .catch((err)=>{
+          res.send({ success: false, msg: "error in admin login : " + err });
+        })
+    }
+    //admin end
     users
       .findOne({ email: email, password: password })
       .then((user) => {
-        if (user) {
+        if (user) 
+        {
           const token = tokenGenerator(user.id);
           //res.send("id is : "+user)
           res.cookie("token", token, {
             expires: new Date(Date.now() + 86400000), //24h
             httpOnly: true,
           });
-
           res.send({ success: true, msg: "Success login", token });
-        } else {
+        }
+        else {
           res.send({ success: false, msg: "Wrong data" });
         }
       })
