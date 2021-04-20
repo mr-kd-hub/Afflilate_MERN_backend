@@ -53,15 +53,20 @@ POST http://localhost:9000/api/addProduct
 Content-Type: application/json
 
 {
-    "flipkart_link":"//ws-in.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=IN&source=ss&ref=as_ss_li_til&ad_type=product_link&tracking_id=zoddok-21&marketplace=amazon&region=IN&placement=B08R1PRPXS&asins=B08R1PRPXS&linkId=0612b96e4e4e513a2735e6be527a4240&show_border=true&link_opens_in_new_window=true",
+    "flipkart_link":"//ws-in.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=IN&source=ac&ref=tf_til&ad_type=product_link&tracking_id=zoddok-21&marketplace=amazon&amp;region=IN&placement=B076CW8XDJ&asins=B076CW8XDJ&linkId=480cfcdf461276e6cfcc38a61ba53ef1&show_border=true&link_opens_in_new_window=true&price_color=333333&title_color=060d14&bg_color=ffffff",
     "status":1,
-    "category":"Kids Wear",
+    "category":"Mens Wear",
     "feature_to_home":1,
     "name":"Shirt"
 }
 
 ###
 GET  http://localhost:9000/api/showCategory
+Content-Type: application/json
+
+
+###
+GET http://localhost:9000/api/showCategorylistAdmin
 Content-Type: application/json
 
 ###

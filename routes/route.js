@@ -1,6 +1,3 @@
-// const express = require('express');
-// const bcrypt = require('bcrypt');
-//const router = express.Router;
 const router = require("express").Router();
 const key = "$adfbaub$cadlvnkajdnv5515aeea";
 const hash = "hvdvcvhvvgcvhgvs$";
@@ -150,7 +147,25 @@ router.post("/signup", async (req, res) => {
     return res.send({ success: false, msg: "error in signup API" + err });
   }
 });
-
+//admin dropdown category
+router.get("/showCategorylistAdmin",async(req,res)=>{
+  try{
+    category
+    .find({}, {title:1, _id:0} )
+    .then((categoryTitle)=>{
+      if (categoryTitle) {
+        res.send({ success: true, msg: "Success", categoryTitle });
+    }
+    })
+    .catch((err)=>{
+      console.log("error in fetch category name api backend : \n"+err)
+    });
+  }
+  catch(err)
+  {
+      res.send({ success: false, msg: "error in showCategoryList API : " + err });
+  }
+})
 //to fetch products
 router.get("/showProduct", async (req, res) => { 
   try {
