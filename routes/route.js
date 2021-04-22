@@ -2,7 +2,6 @@ const router = require("express").Router();
 const key = "$adfbaub$cadlvnkajdnv5515aeea";
 const hash = "hvdvcvhvvgcvhgvs$";
 const { tokenGenerator } = require("../util/tokenGenerator");
-
 //models
 const users = require("../models/signupModel");
 const product = require("../models/productModel");
@@ -47,10 +46,117 @@ router.post("/addProduct", async (req, res) => {
     return res.send({ success: false, msg: "error in category API" + err });
   }
 });
+//admin update status of product
+router.patch("/statusProduct/:status/:id",async(req,res)=>{
+  const id = req.params.id;
+  const status = req.params.status;
+  let a;
+  if(status)
+  {
+      a="Activated"
+  }
+  else
+  {
+      a="Deactivated"
+  }
+  try{
+      product
+      .findByIdAndUpdate({"_id": id},{"status": status})
+      .then((res)=>{
+        return res.send({success: true,msg: `Product ${a} Successfully..`})
+      })
+      .catch((err)=>{
+        return res.send({success: false,msg: `Product Not ${a}..`+err,err})
+      })
+  }
+  catch(err)
+  {
+    return res.send("Error in Status Update Api : "+err)
+  }
+
+});
+//update category data admin
+router.patch("/updateCate/:id",async(req,res)=>{
+      const id = req.params.id;
+      const title = req.body.title;
+      const image = req.body.image;
+      const link = req.body.link;
+  try{
+      category.
+      findByIdAndUpdate( { _id: id },{"title": title,"image":image,"link":link} )
+      .then((data) => {
+        return res.send({success: true,msg: "Updated..",data})
+      })
+      .catch((err)=>{
+        return res.send({success: false,msg: "Not Updated.."})
+      })
+      
+  }catch(err){return res.send({ success: false, msg: "error in Product Delete API" + err });}
+});
+//admin update status category
+router.patch("/statusCategory/:status/:id",async(req,res)=>{
+  const id = req.params.id;
+  const status = req.params.status;
+  let a;
+  if(status)
+  {
+      a="Activated"
+  }
+  else
+  {
+      a="Deactivated"
+  }
+  try{
+      category
+      .findByIdAndUpdate({"_id": id},{"status": status})
+      .then((res)=>{
+        return res.send({success: true,msg: `Category ${a} Successfully..`})
+      })
+      .catch((err)=>{
+        return res.send({success: false,msg: `Category Not ${a}..`,err})
+      })
+  }
+  catch(err)
+  {
+    return res.send("Error in Status Update Api : "+err)
+  }
+
+});
+//admin delete product
+router.delete("/deleteProduct/:id",async(req,res)=>{
+  try{
+      const id = req.params.id;
+      product.
+      deleteOne( { _id: id } )
+      .then(() => {
+        return res.send({success: true,msg: "Product Deleted.."})
+      })
+      .catch((err)=>{
+        return res.send({success: false,msg: "Product Not Found.."})
+      })
+      
+  }catch(err){return res.send({ success: false, msg: "error in Product Delete API" + err });}
+});
+//admin delte category
+router.delete("/deleteCategory/:id",async(req,res)=>{
+  try{
+      const id = req.params.id;
+      category.
+      deleteOne( { _id: id } )
+      .then(() => {
+        return res.send({success: true,msg: "Category Deleted.."})
+      })
+      .catch((err)=>{
+        return res.send({success: false,msg: "Category Not Found.."})
+      })
+      
+  }catch(err){return res.send({ success: false, msg: "error in Product Delete API" + err });}
+});
 
 //admin , add category
 router.post("/addCategory", async (req, res) => {
   try {
+    console.log(req.file)
     const title = req.body.title;
     const image = req.body.image;
     const status = req.body.status;
@@ -60,7 +166,7 @@ router.post("/addCategory", async (req, res) => {
       return res.send({ success: false, msg: "Please Enter all fields.." });
     }
     category
-      .findOne({ title })
+      .findOne({ title  })
       .then((user) => {
         if (user) {
           return res.send({ success: false, msg: "Category alredy exists..." });
@@ -166,6 +272,57 @@ router.get("/showCategorylistAdmin",async(req,res)=>{
       res.send({ success: false, msg: "error in showCategoryList API : " + err });
   }
 })
+router.get("/showProductAdmin", async (req, res) => { 
+  try {
+      product.find().sort({_id:-1})
+      .then((product)=>{
+            if (product) {
+                res.send({ success: true, msg: "Success", product });
+            } else {
+                res.send({ success: false, msg: "No Products To Display" });
+            }
+      })
+      .catch((err)=>{
+        console.log("error in fetch product api backend : \n"+err)
+      })
+  } catch (err) {
+    res.send({ success: false, msg: "error in showCategory API : " + err });
+  }
+});
+//admin show users
+router.get('/users',async(req,res)=>{
+  try{
+    users
+    .find({},{_id:1,fullname:1,email:1,date:1}).sort({_id:-1})
+    .then((userData)=>{
+        res.send({success:true,msg:"Successfulley User Fetched...",userData})
+    })
+    .catch((err)=>{
+      res.send({success:false,msg:"User Not Fetched..."})
+    })
+  }
+  catch(err)
+  {
+    res.send({ success: false, msg: "error in Users Display API : " + err });
+  }
+});
+//admin show feedback
+router.get('/feedback',async(req,res)=>{
+  try{
+    contactus
+    .find({},{_id:0,name:1,email:1,message:1,date:1}).sort({_id:-1})
+    .then((feedback)=>{
+        res.send({success:true,msg:"Successfulley Feedback Fetched...",feedback})
+    })
+    .catch((err)=>{
+      res.send({success:false,msg:"Feedback Not Fetched..."})
+    })
+  }
+  catch(err)
+  {
+    res.send({ success: false, msg: "error in Users Display API : " + err });
+  }
+});
 //to fetch products
 router.get("/showProduct", async (req, res) => { 
   try {
@@ -203,6 +360,25 @@ router.get("/showAllProduct", async (req, res) => {
       res.send({ success: false, msg: "error in showCategory API : " + err });
     }
   });
+//show Allcategoey Admin
+router.get("/showCategoryAdmin", async (req, res) => {
+  try {
+    category
+      .find().sort({_id:-1})
+      .then((user) => {
+        if (user) {
+          res.send({ success: true, msg: "Success", user });
+        } else {
+          res.send({ success: false, msg: "No Category To Display" });
+        }
+      })
+      .catch((err) => {
+        res.send({ success: false, msg: "error in Category Display : " + err });
+      });
+  } catch (err) {
+    res.send({ success: false, msg: "error in showCategory API : " + err });
+  }
+});
 
 //show categoey
 router.get("/showCategory", async (req, res) => {
@@ -329,5 +505,6 @@ router.post("/contact", (req, res) => {
         res.send({ success: false, msg: "error in contact API" });
     }
 });
+
 
 module.exports = router;

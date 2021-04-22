@@ -41,7 +41,7 @@ POST http://localhost:9000/api/addCategory
 Content-Type: application/json
 
 {
-    "title":"Mens Wear",
+    "title":"Menss Wear",
     "image":"https://rukminim1.flixcart.com/image/800/960/jvv9zm80/kids-ethnic-set/b/v/t/2-3-years-digibc001-digimart-original-imafggkydgvztb2k.jpeg?q=50",
     "status":1,
     "feature_to_home":1,
@@ -64,6 +64,9 @@ Content-Type: application/json
 GET  http://localhost:9000/api/showCategory
 Content-Type: application/json
 
+###
+GET http://localhost:9000/api/showCategoryAdmin
+Content-Type: application/json
 
 ###
 GET http://localhost:9000/api/showCategorylistAdmin
@@ -79,4 +82,46 @@ Content-Type: application/json
 
 ###
 GET http://localhost:9000/api/showAllProduct
+Content-Type: application/json
+
+###
+GET http://localhost:9000/api/showProductAdmin
+Content-Type: application/json
+
+###
+DELETE http://localhost:9000/api/deleteProduct/25
+Content-Type: application/json
+
+###
+DELETE http://localhost:9000/api/deleteCategory/25
+Content-Type: application/json
+
+###
+PATCH http://localhost:9000/api/statusProduct/false/1
+Content-Type: application/json
+
+###
+PATCH http://localhost:9000/api/updateCate/6064145d7c07e725401b16ee
+Content-Type: application/json
+
+{
+    "title":"Music",
+    "image":"https://images-na.ssl-images-amazon.com/images/I/71M5Y9eocIL._UY445_.jpg",
+    "link":"https://www.amazon.in/b?_encoding=UTF8&tag=zoddok-21&linkCode=ur2&linkId=0bad38f96902e04fd811ae1a541a8d8a&camp=3638&creative=24630&node=1968024031"
+}
+
+###
+PATCH http://localhost:9000/api/statusCategory/false/1
+Content-Type: application/json
+
+###
+GET http://localhost:9000/api/users
+Content-Type: application/json
+
+###
+GET http://localhost:9000/api/feedback
+Content-Type: application/json
+
+###
+GET http://localhost:9000/api/totalrecord
 Content-Type: application/json
