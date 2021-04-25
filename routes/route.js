@@ -7,6 +7,7 @@ const users = require("../models/signupModel");
 const product = require("../models/productModel");
 const category = require("../models/categoryModel");
 const contactus = require("../models/contactModel");
+const site = require("../models/siteModel");
 
 //admin , add product
 router.post("/addProduct", async (req, res) => {
@@ -61,11 +62,12 @@ router.patch("/statusProduct/:status/:id",async(req,res)=>{
   }
   try{
       product
-      .findByIdAndUpdate({"_id": id},{"status": status})
-      .then((res)=>{
+      .findByIdAndUpdate({"_id": id},{"status": status},{new: true})
+      .then(()=>{
         return res.send({success: true,msg: `Product ${a} Successfully..`})
       })
       .catch((err)=>{
+        console.log(err)
         return res.send({success: false,msg: `Product Not ${a}..`+err,err})
       })
   }
@@ -74,24 +76,6 @@ router.patch("/statusProduct/:status/:id",async(req,res)=>{
     return res.send("Error in Status Update Api : "+err)
   }
 
-});
-//update category data admin
-router.patch("/updateCate/:id",async(req,res)=>{
-      const id = req.params.id;
-      const title = req.body.title;
-      const image = req.body.image;
-      const link = req.body.link;
-  try{
-      category.
-      findByIdAndUpdate( { _id: id },{"title": title,"image":image,"link":link} )
-      .then((data) => {
-        return res.send({success: true,msg: "Updated..",data})
-      })
-      .catch((err)=>{
-        return res.send({success: false,msg: "Not Updated.."})
-      })
-      
-  }catch(err){return res.send({ success: false, msg: "error in Product Delete API" + err });}
 });
 //admin update status category
 router.patch("/statusCategory/:status/:id",async(req,res)=>{
@@ -109,7 +93,7 @@ router.patch("/statusCategory/:status/:id",async(req,res)=>{
   try{
       category
       .findByIdAndUpdate({"_id": id},{"status": status})
-      .then((res)=>{
+      .then(()=>{
         return res.send({success: true,msg: `Category ${a} Successfully..`})
       })
       .catch((err)=>{
@@ -272,6 +256,7 @@ router.get("/showCategorylistAdmin",async(req,res)=>{
       res.send({ success: false, msg: "error in showCategoryList API : " + err });
   }
 })
+//show product admin
 router.get("/showProductAdmin", async (req, res) => { 
   try {
       product.find().sort({_id:-1})
@@ -505,6 +490,114 @@ router.post("/contact", (req, res) => {
         res.send({ success: false, msg: "error in contact API" });
     }
 });
+//show  single category for update
+router.get("/Category/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    category
+      .find({ _id: id },{_id:0,title:1,image:1,link:1})
+      .then((info) => {
+        if (info) {
+          res.send({ success: true, msg: "Success", info });
+        } else {
+          res.send({ success: false, msg: "No Category To Display" });
+        }
+      })
+      .catch((err) => {
+        res.send({ success: false, msg: "error in Category Display : " + err });
+      });
+  } catch (err) {
+    res.send({ success: false, msg: "error in showCategory API : " + err });
+  }
+});
+//update category data admin
+router.patch("/updateCate/:id",async(req,res)=>{
+  const id = req.params.id;
+  const title = req.body.title;
+  const image = req.body.image;
+  const link = req.body.link;
+try{
+  category.
+  findOneAndUpdate( { _id: id }, {$set:{"title": title,"image":image,"link":link}},{new: true} )
+  .then((data) => {
+    return res.send({success: true,msg: "Updated..",data})
+  })
+  .catch((err)=>{
+    return res.send({success: false,msg: "Not Updated.. "+err})
+  })
+  
+}catch(err){return res.send({ success: false, msg: "error in Product Delete API" + err });}
+});
+//show sitedata admin
+router.get("/showSite/:id", async (req, res) => { 
+  try {
+    const id = req.params.id;
+      site.find({ _id: id },{_id:0,email:1,mobile:1,aboutus1:1,aboutus2:1,instagram:1,facebook:1,twitter:1,bannertitle:1,bannersubtitle:1})
+      .then((setting)=>{
+            if (setting) {
+                res.send({ success: true, msg: "Success", setting });
+            } else {
+                res.send({ success: false, msg: "No Products To Display" });
+            }
+      })
+      .catch((err)=>{
+        console.log("error in fetch product api backend : \n"+err)
+      })
+  } catch (err) {
+    res.send({ success: false, msg: "error in showCategory API : " + err });
+  }
+});
+//update SiteData admin
+router.patch("/updateSite/:id",async(req,res)=>{
+  const id = req.params.id;
+  const email = req.body.email;
+  const mobile = req.body.mobile;
+  const aboutus1 = req.body.aboutus1;
+  const aboutus2 = req.body.aboutus2;
+  const instagram = req.body.instagram;
+  const facebook = req.body.facebook;
+  const twitter = req.body.twitter;
+  const bannertitle = req.body.bannertitle;
+  const bannersubtitle = req.body.bannersubtitle;
+try{
+  site.
+  findOneAndUpdate( { _id: id }, {$set:{"email": email,"mobile":mobile,"aboutus1":aboutus1,"aboutus2":aboutus2,"instagram":instagram,"facebook":facebook,"twitter":twitter,"bannertitle":bannertitle,"bannersubtitle":bannersubtitle}},{new: true} )
+  .then((data) => {
+    return res.send({success: true,msg: "Site Updated..",data})
+  })
+  .catch((err)=>{
+    return res.send({success: false,msg: "Not Updated.. "+err})
+  })
+  
+}catch(err){return res.send({ success: false, msg: "error in Product Delete API" + err });}
+});
+//insert site data
+router.post("/addSite", (req, res) => {
+  try {
+   
 
-
+      const siteData = new site({
+         email : req.body.email,
+        mobile : req.body.mobile,
+        aboutus1 : req.body.aboutus1,
+        aboutus2 : req.body.aboutus2,
+        instagram : req.body.instagram,
+        facebook : req.body.facebook,
+        twitter : req.body.twitter,
+        bannertitle : req.body.bannertitle,
+        bannersubtitle : req.body.bannersubtitle
+      });
+      siteData
+      .save()
+      .then(() => {
+          return res.send({ success: true, msg: "Thank you For Contacting Us.."});
+      })
+      .catch((err) => {
+          return res.send({ success: false, msg: "Not Contacted : " + err });
+      });
+  } 
+  catch (err) {
+      res.send({ success: false, msg: "error in site API"+err });
+  }
+});
 module.exports = router;
